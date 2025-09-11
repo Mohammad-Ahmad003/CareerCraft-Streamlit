@@ -9,10 +9,12 @@ import os
 import PyPDF2
 from PIL import Image
 
-load_dotenv()
+st.set_page_config(page_title="Resume ATS Tracker", layout="wide")
+avs.add_vertical_space(4)
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model =  genai.GenerativeModel('gemini-pro')
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+    
+model = genai.GenerativeModel("gemini-pro")
 
 def get_gemini_response(input):
     response = model.generate_content(input)
