@@ -11,7 +11,7 @@ avs(4)
 
 #  API key from Streamlit secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 # ---------- Helper Functions ----------
