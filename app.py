@@ -1,37 +1,36 @@
 import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space as avs
-
 import google.generativeai as genai
 import PyPDF2
 from PIL import Image
 
-#  Page settings
+# ---------- Page settings ----------
 st.set_page_config(page_title="Resume ATS Tracker", layout="wide")
 avs(4)
 
-#  API key from Streamlit secrets
+# ---------- Configure Gemini API ----------
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-model = genai.GenerativeModel("models/gemini-flash-latest")
-
+MODEL_NAME = "models/gemini-flash-latest"  # Supported model
 
 # ---------- Helper Functions ----------
-def get_gemini_response(input):
-    response = model.generate_content(input)
+def get_gemini_response(prompt):
+    response = genai.generate_content(
+        model=MODEL_NAME,
+        prompt=prompt,
+        max_output_tokens=500
+    )
     return response.text
-
 
 def input_pdf_text(uploaded_file):
     reader = PyPDF2.PdfReader(uploaded_file)
     text = ''
-    for page_num in range(len(reader.pages)):
-        page = reader.pages[page_num]
+    for page in reader.pages:
         text += str(page.extract_text())
     return text
 
-
 # ---------- Prompt Template ----------
 input_prompt = """
-As an experienced ATS (Applicant Tracking System), proficient in the technical domain encopassing Software Engineering,
+As an experienced ATS (Applicant Tracking System), proficient in the technical domain encompassing Software Engineering,
 Data Science, Data Analysis, Big Data Engineering, Web Developer, Mobile App Developer, DevOps Engineer, Machine Learning engineer, 
 Cybersecurity analyst, Cloud Solutions Architect, Database Administrator, Network Engineer, AI Engineer, Systems Analyst, 
 Full Stack Developer, UI/UX Designer, IT Project Manager, and additional specialized areas, your objective is to meticulously assess
@@ -64,7 +63,7 @@ with col1:
                 </p>""", unsafe_allow_html=True)
 
 with col2:
-    st.image("Images/Screenshot 2024-06-23 230719.png", use_container_width=True)
+    st.image("Images/Screenshot 2024-06-23 230719.png", width='stretch')
 
 avs(10)
 
@@ -82,7 +81,7 @@ with col2:
 
 with col1:
     img1 = Image.open("Images/Screenshot 2024-06-23 230346.png")
-    st.image(img1, use_container_width=True)
+    st.image(img1, width='stretch')
 
 avs(10)
 
@@ -102,7 +101,7 @@ with col1:
 
 with col2:
     img2 = Image.open("Images/Screenshot 2024-06-23 230326.png")
-    st.image(img2, use_container_width=True)
+    st.image(img2, width='stretch')
 
 avs(10)
 
@@ -127,4 +126,4 @@ with col2:
 
 with col1:
     img3 = Image.open("Images/Screenshot 2024-06-23 230304.png")
-    st.image(img3, use_container_width=True)
+    st.image(img3, width='stretch')
