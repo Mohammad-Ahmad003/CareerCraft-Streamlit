@@ -10,11 +10,11 @@ avs(4)
 
 # ---------- Configure Gemini API ----------
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-MODEL_NAME = "models/gemini-flash-latest"  # Supported model
+MODEL_NAME = "models/gemini-flash-latest"  # Supported Gemini model
 
 # ---------- Helper Functions ----------
 def get_gemini_response(prompt):
-    response = genai.generate_content(
+    response = genai.models.generate_text(
         model=MODEL_NAME,
         prompt=prompt,
         max_output_tokens=500
@@ -95,9 +95,10 @@ with col1:
 
     if submit:
         if uploaded_file is not None:
-            text = input_pdf_text(uploaded_file)
-            response = get_gemini_response(input_prompt.format(text=text, jd=jd))
-            st.subheader(response)
+            with st.spinner("Analyzing resume, please wait..."):
+                text = input_pdf_text(uploaded_file)
+                response = get_gemini_response(input_prompt.format(text=text, jd=jd))
+                st.subheader(response)
 
 with col2:
     img2 = Image.open("Images/Screenshot 2024-06-23 230326.png")
